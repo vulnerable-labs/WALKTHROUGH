@@ -7,22 +7,39 @@ An employee at Apex Global (`j.doe`) has been compromised via a spear-phishing a
 
 ---
 
-## Phase 1: Hunting the Command & Control (C2)
+## Phase 1: Initial Reconnaissance
+
+Your first objective is simply to gain access to the Internal SIEM (Security Information and Event Management) console so you can begin the investigation. 
+
+1. On your attacker machine, open a web browser and navigate to the deployed VM's IP address:
+   `http://<LAB_VM_IP>`
+2. You will be greeted by the **Apex Global** corporate landing page. This is the front-facing website of the compromised company.
+3. Your mission requires internal access. Right-click anywhere on the page and select **View Page Source** (or press `Ctrl+U`).
+4. Scroll to the very bottom of the source code. You will find a hidden comment left by a careless IT Administrator:
+   `<!-- IT Admin Note: Temporary SIEM credentials stored at /credentials.txt -->`
+5. Navigate to `http://<LAB_VM_IP>/credentials.txt`.
+6. You will see a unique, randomly-generated Wazuh Admin password specifically created for your instance (e.g., `admin : 4rTb...`). Copy this password.
+7. Return to the homepage, scroll down, and click the link: **"Internal: Security Operations Center (SIEM)"**. (This will take you to `https://<LAB_VM_IP>:8443`).
+8. Log in using the username `admin` and the password you just discovered. 
+
+You are now inside the Wazuh Dashboard, the nerve center of Apex Global's security monitoring.
+
+---
+
+## Phase 2: Hunting the Command & Control (C2)
 Your first objective is to characterize the threat. By identifying the malicious internal process and where it is reaching out to, we can establish an Indicator of Compromise (IoC).
 
-1. **Access the SIEM:** Navigate to `https://<TARGET_IP>:8443` in your browser. Ignore any self-signed certificate warnings.
-2. **Login:** Use the provided credentials (`admin` / `ApexGlobal2026!`).
-3. **Open Discover:** Click the hamburger menu on the top left, go to **OpenSearch Dashboards**, and click **Discover**.
-4. **Filter for Network Connections:** In the search bar, we want to look for newly initiated network connections. Add a filter: `data.win.system.eventID is 3`.
-5. **Analyze the Logs:** Look at the most recent logs. You will see a `powershell.exe` process making a suspicious outbound connection.
-6. **Extract the Flag:** Expand the log and look at the `data.win.eventdata.destinationHostname` field. This is the malicious C2 domain.
+1. **Open Discover:** Click the hamburger menu on the top left, go to **OpenSearch Dashboards**, and click **Discover**.
+2. **Filter for Network Connections:** In the search bar, we want to look for newly initiated network connections. Add a filter: `data.win.system.eventID is 3`. *(If you see a `rule.level: 7 to 11` filter applied by default, remove it!)*
+3. **Analyze the Logs:** Look at the most recent logs. You will see a `powershell.exe` process making a suspicious outbound connection.
+4. **Extract the Flag:** Expand the log and look at the `data.win.eventdata.destinationHostname` field. This is the malicious C2 domain.
     - **Flag 1:** `VulnOs{C2_D0m41n_Id3nt1f13d}`
 
 *Take note of the Process ID (`4882`) of this malicious PowerShell session. You will need it later.*
 
 ---
 
-## Phase 2: Uncovering Persistence
+## Phase 3: Uncovering Persistence
 Attackers almost always establish a backdoor so they don't lose access if the machine reboots. A very common technique is the creation of a hidden Scheduled Task.
 
 1. **Clear Filters:** Remove the `eventID: 3` filter from the Discover tab.
@@ -35,7 +52,7 @@ Attackers almost always establish a backdoor so they don't lose access if the ma
 
 ---
 
-## Phase 3: Threat Remediation (The Kill Chain)
+## Phase 4: Threat Remediation
 You have successfully characterized the threat. It is time to perform live host containment before the ransomware timer runs out. 
 
 1. **Access the Terminal:** Navigate to the Apex Global homepage at `http://<TARGET_IP>`. Scroll to the bottom and click the hidden text link: **Internal: Employee IT & Security Incident Response Portal**.
