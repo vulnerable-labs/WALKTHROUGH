@@ -23,7 +23,7 @@
     ```bash
     gobuster dir -u http://<TARGET_IP>:8000/api -w /usr/share/wordlists/dirb/common.txt -x php
     ```
-    You will discover `/api/diagnostic.php`.
+   
 
 ### Phase 2: Initial Foothold (Command Injection)
 
@@ -65,14 +65,13 @@ As `www-data`, your goal is to pivot to a legitimate user account.
     cat .env
     ```
     You will find the active database credentials left by the developer:
-    `DB_USER=alex`
-    `DB_PASSWORD=Elevate2026!`
+
 
 3.  **SSH as Alex:**
     Developers frequently reuse passwords. Open a new terminal on your Kali machine and SSH directly into the box using the credentials you just found.
     ```bash
     ssh alex@<TARGET_IP>
-    # Enter password: Elevate2026!
+    # Enter password
     ```
 
 4.  **Capture the User Flag:**
