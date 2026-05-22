@@ -60,10 +60,10 @@ curl -H "Metadata-Flavor: Google" http://overlord.vulnos:8082/computeMetadata/v1
 
 ### 3. Exfiltrating Phase 2 Credentials & Flag
 The response yields the VM's installation startup script. Reviewing the script content reveals:
-* **The Phase 2 Metadata Leak Flag:** `VulnOS{M3TADATA_SCRIPI_L3AK_2026}` (Redacted in CTF submissions as `VulnOS{<METADATA_FLAG_REDACTED>}`).
+* **The Phase 2 Metadata Leak Flag:** `VulnOS{<REDACTED>}` (Redacted in CTF submissions as `VulnOS{<METADATA_FLAG_REDACTED>}`).
 * **Leaked Domain Credentials:** 
   * **Low-privileged AD User:** `gaurav`
-  * **Password:** `Overlord-P@ssw0rd!2026`
+   * **Password:** `REDACTED`
 
 ---
 
@@ -121,7 +121,7 @@ MIIE... [Signed Certificate Body Data] ...
 ```
 
 The output page confirms that the certificate was successfully issued to the `Administrator` principal, granting you the Phase 4 flag:
-* **The Phase 4 Domain Admin Flag:** `VulnOS{ESC1_CERT_IMPERSONATION}` (Redacted in CTF submissions as `VulnOS{<ESC1_FLAG_REDACTED>}`).
+* **The Phase 4 Domain Admin Flag:** `VulnOS{<REDACTED>}` (Redacted in CTF submissions as `VulnOS{<ESC1_FLAG_REDACTED>}`).
 
 ---
 
@@ -172,6 +172,6 @@ whoami
 
 cat /root/root.txt
 ```
-* **The Root Flag:** `VulnOS{H0ST_TAK30V3R_ROOT}` (Redacted in CTF submissions as `VulnOS{<ROOT_FLAG_REDACTED>}`).
+* **The Root Flag:** `VulnOS{<REDACTED>}` (Redacted in CTF submissions as `VulnOS{<ROOT_FLAG_REDACTED>}`).
 
 Congratulations! You have completed the **Overlord Prime** laboratory.
